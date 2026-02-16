@@ -1,0 +1,87 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 20px;
+}
+
+.Logo {
+  height: 10px;
+  width: 50px;
+  object-fit: contain; /* Prevents distortion */
+}
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  gap: 45px;            /* more space between items */
+  font-size: 20px;      /* increase text size */
+  font-weight: 500;
+  position: relative;
+  top: -8px;            /* move menu slightly upward */
+}
+
+.navbar-menu li {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.navbar-menu li:hover {
+  color: #ff4c24;   /* nice hover color (optional) */
+}
+
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.navbar-search-icon {
+  position: relative;
+}
+ .navbar button{
+   background: transparent;
+   font-size: 16px;
+   color:#49557e;
+   border: 1px solid tomato;
+   padding: 10px 30px;
+   border-radius:50px;
+   cursor:pointer;
+   transition:0.3s;
+ }
+ .navbar button:hover{
+   background-color: #fff4f2;
+ }
+.dot {
+  height: 8px;
+  width: 8px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: -6px;
+  right: -2px;
+}
+.navbar .active{
+  padding-bottom: 2px;
+  border-bottom: 2px solid #49557e;
+}
+.navbar li{
+  cursor:pointer;
+}
+.navbar-search-icon{
+  position: relative;
+}
+
+.navbar-search-icon .dot{
+  position:absolute;
+  min-width: 10px;
+  min-height: 10px;
+  background-color: tomato;
+  border-radius: 5px;
+  top: -8px;
+  right: -8px;
+}
+
+
+
