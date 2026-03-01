@@ -1,39 +1,24 @@
-import dns from 'node:dns';
-dns.setDefaultResultOrder('ipv4first');
-import 'dotenv/config'; // Loads variables immediately
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/foodRoute.js";
 import userRouter from "./routes/userRoute.js";
+import "dotenv/config";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 
-const startServer = async () => {
-  try {
-    await connectDB();
-    app.listen(PORT, () => {
-      console.log(`🚀 Server started on http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error("❌ Database failed, server not started:", error.message);
-  }
-};
-
-startServer();
-
-// App config
+// app config
 const app = express();
-const PORT = process.env.PORT || 4000;
+const port = process.env.PORT || 4000;
 
-// Middleware
+//middlewares
 app.use(express.json());
 app.use(cors());
 
 // DB connection
-connectDB(); 
+connectDB();
 
-// API routes
+// api endpoints
 app.use("/api/food", foodRouter);
 app.use("/images", express.static("uploads"));
 app.use("/api/user", userRouter);
@@ -41,6 +26,14 @@ app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 
 app.get("/", (req, res) => {
-  res.send("API working 🚀");
+  res.send("API Working");
 });
 
+// TEMP TEST ROUTE
+app.get("/test", (req, res) => {
+  res.json({ success: true, message: "Backend Working Fine" });
+});
+
+app.listen(port, () => {
+  console.log(`Server Started on port: ${port}`);
+});
