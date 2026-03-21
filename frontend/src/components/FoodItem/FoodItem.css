@@ -36,8 +36,19 @@
     font-weight: 500;
     margin: 10px 0px;
 }
-.food-item-img-container{
+.food-item-img-container {
     position: relative;
+    /* Forces the 3:2 aspect ratio (612/408 = 1.5) */
+    aspect-ratio: 3 / 2; 
+    overflow: hidden;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.food-item-image {
+    width: 100%;
+    height: 100%;
+    /* Crops the image to fill the 3:2 box without stretching */
+    object-fit: cover; 
 }
 .food-item-img-container .add{
     position: absolute;

@@ -107,10 +107,10 @@ import React, { useState, useContext } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import "./LoginPopup.css";
+import './LoginPopup.css';
 
 const LoginPopup = ({ setShowLogin }) => {
-  const { url, setToken, loadCartData } = useContext(StoreContext); // use url from context
+  const { url, setToken, loadCartData } = useContext(StoreContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -118,6 +118,7 @@ const LoginPopup = ({ setShowLogin }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const response = await axios.post(`${url}/api/user/login`, {
         email,
@@ -127,32 +128,49 @@ const LoginPopup = ({ setShowLogin }) => {
       if (response.data.success) {
         toast.success("Login successful!");
         const token = response.data.token;
-        setToken(token);                  // set token in context
-        localStorage.setItem("token", token); // save token for reloads
-        if (loadCartData) await loadCartData(token); // load cart
-        setShowLogin(false);              // close popup
+
+        setToken(token); // set token in context
+        localStorage.setItem("token", token); // persist token
+        if (loadCartData) await loadCartData(token); // load cart data
+
+        // optional: clear form fields
+        setEmail("");
+        setPassword("");
+
+        setShowLogin(false); // close popup
       } else {
         toast.error(response.data.message || "Login failed");
       }
     } catch (err) {
-      console.error("Login error:", err.response || err.message);
-      toast.error("Cannot reach backend. Make sure server is running.");
+      if (err.response) {
+        console.error("Backend Error Data:", err.response.data);
+        toast.error(err.response.data.message);
+      } else {
+        console.error("Network Error:", err.message);
+        toast.error("Cannot reach server. Check your connection.");
+      }
     } finally {
-      setLoading(false);
+      setLoading(false); // always reset loading state
     }
   };
 
   return (
-    <div className="login-popup-overlay">
-      <div className="login-popup">
-        <button className="close-btn" onClick={() => setShowLogin(false)}>
-          X
-        </button>
-        <h2>Login</h2>
-        <form onSubmit={handleLogin}>
+    <div className="login-popup"> {/* This is now the dark background */}
+      <div className="login-popup-container"> {/* This is the white box */}
+        <div className="login-popup-title">
+          <h2>Login</h2>
+          <button 
+            className="close-btn" 
+            onClick={() => setShowLogin(false)}
+            style={{border:'none', background:'none', fontSize:'20px', cursor:'pointer'}}
+          >
+            X
+          </button>
+        </div>
+        <form className="login-popup-inputs" onSubmit={handleLogin}>
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -168,9 +186,13 @@ const LoginPopup = ({ setShowLogin }) => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+        <div className="login-popup-condition">
+            <input type="checkbox" required />
+            <p>By continuing, i agree to the terms of use & privacy policy.</p>
+        </div>
+        <p>Create a new account? <span>Click here</span></p>
       </div>
     </div>
   );
 };
-
 export default LoginPopup;
